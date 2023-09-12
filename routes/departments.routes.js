@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Department = require('../models/department.model');
+const Department = require('../models/department.modele');
 
 router.get('/departments', async (req, res) => {
   try {
@@ -39,8 +39,8 @@ router.get('/departments/:id', async (req, res) => {
 router.post('/departments', async (req, res) => {
 
   try {
-
     const { name } = req.body;
+ 
     const newDepartment = new Department({ name: name });
     await newDepartment.save();
     res.json({ message: 'OK' });
@@ -61,7 +61,6 @@ router.put('/departments/:id', async (req, res) => {
       res.json( { message: 'OK '})
     } 
     else res.status(404).json({ message: 'Not found...' })
-
   }
   catch(err) {
     res.status(500).json( { massage: err})
@@ -70,10 +69,19 @@ router.put('/departments/:id', async (req, res) => {
 
 router.delete('/departments/:id', async (req, res) => {
 
-  req.db.collection('departments').deleteOne({_id: ObjectId(req.params.id)}, err => {
-    if (err) res.status(500).json({ message: err })
-    else res.json({ message: 'OK' });
-  })
+  try {
+    const dep = await Department.findById(req.params.id)
+    if (dep) {
+      await Department.deleteOne( { id: req.params.id })
+      res.json( { message: 'OK'})
+    }
+    else res.status(404).json( { message: 'Not found...'})
+    
+  }
+  catch(err) {
+    res.status(500).json( { message: err })
+  }
+
 });
 
 module.exports = router;

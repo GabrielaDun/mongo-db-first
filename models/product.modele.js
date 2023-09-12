@@ -5,4 +5,4 @@ const productsSchema = new mongoose.Schema({
     client: { type: String, required: true}
 })
 
-modele.export = mongoose.model('Product', productsSchema)
+module.exports = mongoose.model('Product', productsSchema)

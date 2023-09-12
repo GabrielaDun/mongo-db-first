@@ -53,10 +53,10 @@ router.post('/employees', async (req, res) => {
 router.put('/employees/:id', async (req, res) => {
   try {
     const { firstName, lastName } = req.body;
-    const id = await Employee.findById(req.params.id);
-    if(id) {
+    const employee = await Employee.findById(req.params.id);
+    if(employee) {
       await Employee.updateOne({ _id: req.params.id, }, {$set: {firstName: firstName, lastName:lastName }})
-      res.json( { message: 'OK '})
+      res.json( { message: 'OK' })
     }
     else res.status(404).json( { message: 'Not found' })
   }
@@ -69,8 +69,8 @@ router.delete('/employees/:id', async (req, res) => {
   try {
     const emplo = await Employee.findById(req.params.id)
     if ( emplo) {
-      await Employee.deleteOne({ _id: res.params.id})
-      res.json( { message: 'OK'})
+      await Employee.deleteOne({ _id: req.params.id})
+      res.json( { message: emplo })
     }
     else res.status(404).json( { message: 'Not found'})
 
